@@ -3,6 +3,8 @@
 //   Even better, extract that logic and reuse it in both places. You can use
 //   private functions or private static methods for that.
 
+use std::hash::DefaultHasher;
+
 pub struct Ticket {
     title: String,
     description: String,
@@ -34,6 +36,54 @@ impl Ticket {
         }
     }
 
+    fn title_ok(title: &String) -> bool {
+        if title.is_empty() {
+            panic!("Title cannot be empty");
+            return false;
+        }
+        if title.len() > 50 {
+            panic!("Title cannot be longer than 50 bytes");
+            return false;
+        }
+        true
+    }
+
+    pub fn set_title(&mut self, new_title: String) {
+        if Ticket::title_ok(&new_title) {
+            self.title = new_title;
+        }
+    }
+
+    fn description_ok(description: &String) -> bool {
+        if description.is_empty() {
+            panic!("Description cannot be empty");
+            return false;
+        }
+        if description.len() > 500 {
+            panic!("Description cannot be longer than 500 bytes");
+            return false;
+        }
+        true
+    }
+
+    pub fn set_description(&mut self, new_description: String) {
+        if Ticket::description_ok(&new_description) {
+            self.description = new_description;
+        }
+    }
+
+    fn status_ok(status: &String) -> bool {
+        if status != "To-Do" && status != "In Progress" && status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+        true
+    }
+
+    pub fn set_status(&mut self, new_status: String) {
+        if Ticket::status_ok(&new_status) {
+            self.status = new_status;
+        }
+    }
     pub fn title(&self) -> &String {
         &self.title
     }
